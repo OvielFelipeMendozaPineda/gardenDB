@@ -1,3 +1,5 @@
+# GARDEN DATABAS
+
 ## Consultas sobre una tabla
 
 1. Devuelve un listado con el código de oficina y la ciudad donde hay oficinas.
@@ -298,150 +300,142 @@
 
 11. Devuelve un listado de todos los pedidos que fueron rechazados en 2009.
 
-          ```sql
-          +----+--------------+----------------+---------------+-----------------------+------------+-----------+
-          | id | fecha_pedido | fecha_esperada | fecha_entrega | comentarios           | id_cliente | estado_id |
-          +----+--------------+----------------+---------------+-----------------------+------------+-----------+
-          |  5 | 2009-05-05   | 2009-05-20     | NULL          | Pedido de última hora |          5 |         5 |
-          +----+--------------+----------------+---------------+-----------------------+------------+-----------+
-          ```
-
-
-      ​    
+    ```sql
+    SELECT id , fecha_pedido, fecha_esperada, fecha_entrega, comentarios, id_cliente, estado_id 
+    from pedido 
+    WHERE id = 5
+      +----+--------------+----------------+---------------+-----------------------+------------+-----------+
+      | id | fecha_pedido | fecha_esperada | fecha_entrega | comentarios           | id_cliente | estado_id |
+      +----+--------------+----------------+---------------+-----------------------+------------+-----------+
+      |  5 | 2009-05-05   | 2009-05-20     | NULL          | Pedido de última hora |          5 |         5 |
+      +----+--------------+----------------+---------------+-----------------------+------------+-----------+
+        
+    ```
 
 12. Devuelve un listado de todos los pedidos que han sido entregados en el
             mes de enero de cualquier año.
 
-          ```sql
-          SELECT
-              pe.id AS codigo_pedido,
-              pe.id_cliente AS codigo_cliente,
-              pe.fecha_esperada,
-              pe.fecha_entrega,
-              pe.comentarios
-          FROM
-              pedido AS pe
-          INNER JOIN estado AS st ON pe.estado_id = st.id
-          WHERE
-              pe.estado_id = 4
-              AND MONTH(pe.fecha_pedido) = 01;
-          ```
+    ```sql
+    
+      SELECT
+          pe.id AS codigo_pedido,
+          pe.id_cliente AS codigo_cliente,
+          pe.fecha_esperada,
+          pe.fecha_entrega,
+          pe.comentarios
+      FROM
+          pedido AS pe
+      INNER JOIN estado AS st ON pe.estado_id = st.id
+      WHERE
+          pe.estado_id = 4
+          AND MONTH(pe.fecha_pedido) = 01;
+    ```
 
 
-      ​    
 
 13. Devuelve un listado con todos los pagos que se realizaron en el
             año 2008 mediante Paypal. Ordene el resultado de mayor a menor.
 
-          ```sql
-          SELECT trans.id, trans.id_forma_pago_cliente, trans.fecha_pago, trans.total, fp.tipo
-          FROM transaccion AS trans
-          INNER JOIN forma_pago_cliente AS fpc ON trans.id_forma_pago_cliente = fpc.id
-          INNER JOIN forma_pago AS fp ON fpc.id_forma_pago = fp.id
-          WHERE fp.tipo = 'PayPal' AND YEAR(trans.fecha_pago) = 2008;
-          /* SE MODIFICO LA FECHA DE LA CONSULTA YA QUE NO HUBIERON RESULTADOS QUE COINCIDIERAN CON LA PRIMERA */
-          SELECT trans.id, trans.id_forma_pago_cliente, trans.fecha_pago, trans.total, fp.tipo
-          FROM transaccion AS trans
-          INNER JOIN forma_pago_cliente AS fpc ON trans.id_forma_pago_cliente = fpc.id
-          INNER JOIN forma_pago AS fp ON fpc.id_forma_pago = fp.id
-          WHERE fp.tipo = 'PayPal' AND YEAR(trans.fecha_pago) = 2009;
-          +----+-----------------------+------------+-------+--------+
-          | id | id_forma_pago_cliente | fecha_pago | total | tipo   |
-          +----+-----------------------+------------+-------+--------+
-          |  4 |                     4 | 2009-05-04 |  1200 | PayPal |
-          |  9 |                     4 | 2009-05-04 |   300 | PayPal |
-          +----+-----------------------+------------+-------+--------+
-
-
-      ​    
-          ```
-
-
-      ​    
+    ```sql
+    
+      SELECT trans.id, trans.id_forma_pago_cliente, trans.fecha_pago, trans.total, fp.tipo
+      FROM transaccion AS trans
+      INNER JOIN forma_pago_cliente AS fpc ON trans.id_forma_pago_cliente = fpc.id
+      INNER JOIN forma_pago AS fp ON fpc.id_forma_pago = fp.id
+      WHERE fp.tipo = 'PayPal' AND YEAR(trans.fecha_pago) = 2008;
+      /* SE MODIFICO LA FECHA DE LA CONSULTA YA QUE NO HUBIERON RESULTADOS QUE COINCIDIERAN CON LA PRIMERA */
+      SELECT trans.id, trans.id_forma_pago_cliente, trans.fecha_pago, trans.total, fp.tipo
+      FROM transaccion AS trans
+      INNER JOIN forma_pago_cliente AS fpc ON trans.id_forma_pago_cliente = fpc.id
+      INNER JOIN forma_pago AS fp ON fpc.id_forma_pago = fp.id
+      WHERE fp.tipo = 'PayPal' AND YEAR(trans.fecha_pago) = 2009;
+      +----+-----------------------+------------+-------+--------+
+      | id | id_forma_pago_cliente | fecha_pago | total | tipo   |
+      +----+-----------------------+------------+-------+--------+
+      |  4 |                     4 | 2009-05-04 |  1200 | PayPal |
+      |  9 |                     4 | 2009-05-04 |   300 | PayPal |
+      +----+-----------------------+------------+-------+--------+ 
+    ```
 
 14. Devuelve un listado con todas las formas de pago que aparecen en la
             tabla pago. Tenga en cuenta que no deben aparecer formas de pago
             repetidas.
 
-          ```sql
-          SELECT DISTINCT id, tipo FROM forma_pago;
-          +----+------------------------+
-          | id | tipo                   |
-          +----+------------------------+
-          |  1 | Transferencia bancaria |
-          |  2 | Tarjeta de crédito     |
-          |  3 | Cheque                 |
-          |  4 | PayPal                 |
-          |  5 | Efectivo               |
-          +----+------------------------+
-          ```
-
-
-      ​    
+    ```sql
+    
+      SELECT DISTINCT id, tipo FROM forma_pago;
+      +----+------------------------+
+      | id | tipo                   |
+      +----+------------------------+
+      |  1 | Transferencia bancaria |
+      |  2 | Tarjeta de crédito     |
+      |  3 | Cheque                 |
+      |  4 | PayPal                 |
+      |  5 | Efectivo               |
+      +----+------------------------+
+     
+    ```
 
 15. Devuelve un listado con todos los productos que pertenecen a la
             gama Ornamentales y que tienen más de 100 unidades en stock. El listado
             deberá estar ordenado por su precio de venta, mostrando en primer lugar
             los de mayor precio.
 
-          ```sql
-          SELECT p.id, p.nombre_producto, dp.precio_venta, dp.stock
-          FROM producto AS p
-          INNER JOIN detalle_producto AS dp ON p.id = dp.id_producto
-          INNER JOIN gama AS g ON dp.id_gama = g.id
-          WHERE g.descripcion_texto = 'Ornamentales' AND dp.stock > 100
-          ORDER BY dp.precio_venta DESC;
-          ```
-
-
-      ​    
+    ```sql
+    
+      SELECT p.id, p.nombre_producto, dp.precio_venta, dp.stock
+      FROM producto AS p
+      INNER JOIN detalle_producto AS dp ON p.id = dp.id_producto
+      INNER JOIN gama AS g ON dp.id_gama = g.id
+      WHERE g.descripcion_texto = 'Ornamentales' AND dp.stock > 100
+      ORDER BY dp.precio_venta DESC;
+      
+    ```
 
 16. Devuelve un listado con todos los clientes que sean de la ciudad de Madrid y
             cuyo representante de ventas tenga el código de empleado 11 o 30.
 
       ~~~sql
-      ```sql
+      
       SELECT  c.id , c.nombre_cliente, c.apellido_1_cliente,  c.apellido_2_cliente, c.rep_ventas_id,  c.limite_credito
       FROM cliente AS c
       INNER JOIN direccion_cliente AS dc ON c.id = dc.cliente_id
       INNER JOIN ciudad AS ci ON dc.ciudad_id = ci.id
       WHERE ci.nombre_ciudad = 'Madrid' AND c.rep_ventas_id = 11 OR c.rep_ventas_id = 30;
-      ```
+      
       ~~~
 
 
-      ​    
-    
-          ##   Consultas multi-tabla (Composición interna)
-          
-            Resuelva todas las consultas utilizando la sintaxis de SQL1 y SQL2. Las consultas con
-            sintaxis de SQL2 se deben resolver con INNER JOIN y NATURAL JOIN.
+
+      ##   Consultas multi-tabla (Composición interna)
+
+​        Resuelva todas las consultas utilizando la sintaxis de SQL1 y SQL2. Las consultas con
+​        sintaxis de SQL2 se deben resolver con INNER JOIN y NATURAL JOIN.
 
 17. Obtén un listado con el nombre de cada cliente y el nombre y apellido de su
                representante de ventas.
 
-          ```sql
-          SELECT c.nombre_cliente, e.nombre_empleado, e.apellido_1
-          FROM cliente as c
-          INNER JOIN empleado as e ON c.id = e.id;
-          +----------------+-----------------+------------+
-          | nombre_cliente | nombre_empleado | apellido_1 |
-          +----------------+-----------------+------------+
-          | Daniel         | Eduardo         | Hernández  |
-          | María          | María           | García     |
-          | Juan           | Juan            | Martínez   |
-          | Ana            | Laura           | Sánchez    |
-          | Carlos         | Carlos          | Rodríguez  |
-          | Laura          | Ana             | López      |
-          | Pedro          | Pedro           | Fernández  |
-          | Sofía          | Sofía           | Ruiz       |
-          | Luis           | Luis            | Martínez   |
-          | Paula          | Paula           | Gómez      |
-          +----------------+-----------------+------------+
-          ```
-
-
-      ​    
+    ```sql
+    
+      SELECT c.nombre_cliente, e.nombre_empleado, e.apellido_1
+      FROM cliente as c
+      INNER JOIN empleado as e ON c.id = e.id;
+      +----------------+-----------------+------------+
+      | nombre_cliente | nombre_empleado | apellido_1 |
+      +----------------+-----------------+------------+
+      | Daniel         | Eduardo         | Hernández  |
+      | María          | María           | García     |
+      | Juan           | Juan            | Martínez   |
+      | Ana            | Laura           | Sánchez    |
+      | Carlos         | Carlos          | Rodríguez  |
+      | Laura          | Ana             | López      |
+      | Pedro          | Pedro           | Fernández  |
+      | Sofía          | Sofía           | Ruiz       |
+      | Luis           | Luis            | Martínez   |
+      | Paula          | Paula           | Gómez      |
+      +----------------+-----------------+------------+
+    
+    ```
 
 18. Muestra el nombre de los clientes que hayan realizado pagos junto con el
                nombre de sus representantes de ventas.
@@ -958,7 +952,7 @@
         ```
 
 
-    ​    
+        
 
 40. ¿Cuántos clientes tiene cada país?
 
@@ -991,7 +985,7 @@
         ```
 
 
-    ​    
+        
 
 41. ¿Cuál fue el pago medio en 2009?
 
@@ -1008,7 +1002,7 @@
         ```
 
 
-    ​    
+        
 
 42. ¿Cuántos pedidos hay en cada estado? Ordena el resultado de forma
                descendente por el número de pedidos.
@@ -1942,147 +1936,187 @@ CALL registrarCliente ('Felipe', 'Mendoza', 'Pineda', 9, 10000);
 
 2. Registrar dirección del cliente.
 
+```sql
+DELIMITER $$
+DROP PROCEDURE IF EXISTS registrarDireccionCliente $$
+CREATE PROCEDURE registrarDireccionCliente(
+    IN  linea_1 VARCHAR(50),
+    IN  linea_2 VARCHAR(50),
+    IN  codigo_postal INT,
+    IN  ciudad_id INT,
+    IN  cliente_id INT
+)
+BEGIN 
+    INSERT INTO direccion_cliente (linea_1,  linea_2, codigo_postal, ciudad_id,  cliente_id) 
+    VALUES (linea_1,  linea_2, codigo_postal, ciudad_id,  cliente_id);
+END $$
+DELIMITER ;
+CALL registrarDireccionCliente ('Cuadrada 63b', '208_265', 68001, 5, 21);
+
+
+```
+
+3. Registrar telefono del cliente
+
+```sql
+DELIMITER $$
+DROP PROCEDURE IF EXISTS registrarTELCliente $$
+CREATE PROCEDURE registrarTELCliente(
+    IN  cliente_id INT,
+    IN  tipo_telefono_id INT,
+    IN  numero INT,
+    IN  fax VARCHAR(20)
+)
+BEGIN 
+    INSERT INTO telefono_cliente (cliente_id,  tipo_telefono_id, numero, fax) 
+    VALUES (cliente_id,  tipo_telefono_id, numero, fax);
+END $$
+DELIMITER ;
+CALL registrarTELCliente (21, 1, 316588090, 784555);
+
+
+
+```
+
+4. Modificar un empleado.
+
+```sql
+DELIMITER $$
+DROP PROCEDURE IF EXISTS modificarNombreyApellidosEmpleado $$
+CREATE PROCEDURE modificarNombreyApellidosEmpleado(
+    IN in_id INT,
+    IN in_nombre_empleado VARCHAR(50),
+    IN in_apellido_1 VARCHAR(50),
+    IN in_apellido_2 VARCHAR(50) 
+)
+BEGIN 
+    UPDATE empleado
+    SET nombre_empleado = in_nombre_empleado,
+        apellido_1 = in_apellido_1,
+        apellido_2 = in_apellido_2
+    WHERE id = in_id;
+END $$
+DELIMITER ;
+
+CALL modificarNombreyApellidosEmpleado(8, 'Felipe', 'Mendoza', 'Pineda');
+```
+
+5. Eliminar una gama
+
+```sql
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ElimnarGama $$
+CREATE PROCEDURE ElimnarGama(
+    IN in_id INT
+)
+BEGIN 
+    DELETE  FROM gama
+    WHERE id = in_id;
+END $$
+DELIMITER ;
+CALL ElimnarGama(6);
+```
+
+6. Modifica nombre de gama
+
+```sql
+DELIMITER $$
+DROP PROCEDURE IF EXISTS modificarNombreGama $$
+CREATE PROCEDURE modificarNombreGama(
+    IN in_id INT,
+    IN  in_descripcion_texto text
+)
+BEGIN 
+    UPDATE gama
+    SET descripcion_texto = in_descripcion_texto
+    WHERE id = in_id;
+END $$
+DELIMITER ;
+CALL modificarNombreGama(7, 'Mecánica');
+```
+
+7. Renombrar puesto.
+
+```sql
+DELIMITER $$
+DROP PROCEDURE IF EXISTS modificarPuesto $$
+CREATE PROCEDURE modificarPuesto(
+    IN in_id INT,
+    IN  in_nombre_puesto VARCHAR(20)
+)
+BEGIN 
+    UPDATE puesto
+    SET nombre_puesto = in_nombre_puesto
+    WHERE id = in_id;
+END $$
+DELIMITER ;
+CALL modificarPuesto(10, 'Técnico Auxiliar');
+```
+
+8. Crear nuevo puesto.
+
+```sql
+DELIMITER $$
+DROP PROCEDURE IF EXISTS CrearPuesto $$
+CREATE PROCEDURE CrearPuesto (
+    IN in_nombre_puesto VARCHAR(50)
+)
+BEGIN 
+    INSERT INTO puesto (nombre_puesto) VALUES (in_nombre_puesto);
+END $$
+DELIMITER ;
+
+
+CALL modificarPuesto(null, 'TProfesional Auxiliar');
+```
+
+9. Añadir ciudad
+
    ```sql
    DELIMITER $$
-   DROP PROCEDURE IF EXISTS registrarDireccionCliente $$
-   CREATE PROCEDURE registrarDireccionCliente(
-       IN  linea_1 VARCHAR(50),
-       IN  linea_2 VARCHAR(50),
-       IN  codigo_postal INT,
-       IN  ciudad_id INT,
-       IN  cliente_id INT
+   
+   DROP PROCEDURE IF EXISTS crearCiudad $$
+   
+   CREATE PROCEDURE crearCiudad (
+       IN in_nombre_ciudad VARCHAR(50),
+       IN in_region_id INT
    )
    BEGIN 
-       INSERT INTO direccion_cliente (linea_1,  linea_2, codigo_postal, ciudad_id,  cliente_id) 
-       VALUES (linea_1,  linea_2, codigo_postal, ciudad_id,  cliente_id);
+       INSERT INTO ciudad (nombre_ciudad, region_id) VALUES (in_nombre_ciudad, in_region_id);
    END $$
-   DELIMITER ;
-   CALL registrarDireccionCliente ('Cuadrada 63b', '208_265', 68001, 5, 21);
    
+   DELIMITER ;
+   CALL crearCiudad('Alicante', 4);
    
    ```
 
-   3. Registrar telefono del cliente
+   10. Eliminar ciudad
 
-      ```sql
-      DELIMITER $$
-      DROP PROCEDURE IF EXISTS registrarTELCliente $$
-      CREATE PROCEDURE registrarTELCliente(
-          IN  cliente_id INT,
-          IN  tipo_telefono_id INT,
-          IN  numero INT,
-          IN  fax VARCHAR(20)
-      )
-      BEGIN 
-          INSERT INTO telefono_cliente (cliente_id,  tipo_telefono_id, numero, fax) 
-          VALUES (cliente_id,  tipo_telefono_id, numero, fax);
-      END $$
-      DELIMITER ;
-      CALL registrarTELCliente (21, 1, 316588090, 784555);
-      
-      
-      
-      ```
+   ```sql
+   DELIMITER $$
+   
+   DROP PROCEDURE IF EXISTS eliminarCiudad $$
+   
+   CREATE PROCEDURE eliminarCiudad (
+       IN in_nombre_ciudad VARCHAR(50)
+   )
+   BEGIN 
+   	DECLARE ciudad_id INT;
+   	SELECT id INTO ciudad_id FROM ciudad WHERE nombre_ciudad = in_nombre_ciudad;
+      	DELETE FROM ciudad WHERE id = ciudad_id; 
+   END $$
+   
+   DELIMITER ;
+   
+   CALL eliminarCiudad('Alicante');
+   
+   ```
 
-      4. Modificar un empleado.
+   
 
-         ```sql
-         DELIMITER $$
-         DROP PROCEDURE IF EXISTS modificarNombreyApellidosEmpleado $$
-         CREATE PROCEDURE modificarNombreyApellidosEmpleado(
-             IN in_id INT,
-             IN in_nombre_empleado VARCHAR(50),
-             IN in_apellido_1 VARCHAR(50),
-             IN in_apellido_2 VARCHAR(50) 
-         )
-         BEGIN 
-             UPDATE empleado
-             SET nombre_empleado = in_nombre_empleado,
-                 apellido_1 = in_apellido_1,
-                 apellido_2 = in_apellido_2
-             WHERE id = in_id;
-         END $$
-         DELIMITER ;
-         
-         CALL modificarNombreyApellidosEmpleado(8, 'Felipe', 'Mendoza', 'Pineda');
-         ```
+# VISTAS
 
-         5. Eliminar una gama
-
-            ```sql
-            DELIMITER $$
-            DROP PROCEDURE IF EXISTS ElimnarGama $$
-            CREATE PROCEDURE ElimnarGama(
-                IN in_id INT
-            )
-            BEGIN 
-                DELETE  FROM gama
-                WHERE id = in_id;
-            END $$
-            DELIMITER ;
-            CALL ElimnarGama(6);
-            ```
-
-            6. Modifica nombre de gama
-
-            ```sql
-            DELIMITER $$
-            DROP PROCEDURE IF EXISTS modificarNombreGama $$
-            CREATE PROCEDURE modificarNombreGama(
-                IN in_id INT,
-                IN  in_descripcion_texto text
-            )
-            BEGIN 
-                UPDATE gama
-                SET descripcion_texto = in_descripcion_texto
-                WHERE id = in_id;
-            END $$
-            DELIMITER ;
-            CALL modificarNombreGama(7, 'Mecánica');
-            ```
-
-            7. Renombrar puesto.
-
-               ```sql
-               DELIMITER $$
-               DROP PROCEDURE IF EXISTS modificarPuesto $$
-               CREATE PROCEDURE modificarPuesto(
-                   IN in_id INT,
-                   IN  in_nombre_puesto VARCHAR(20)
-               )
-               BEGIN 
-                   UPDATE puesto
-                   SET nombre_puesto = in_nombre_puesto
-                   WHERE id = in_id;
-               END $$
-               DELIMITER ;
-               CALL modificarPuesto(10, 'Técnico Auxiliar');
-               ```
-
-            8. Crear nuevo puesto.
-
-               ```sql
-               DELIMITER $$
-               DROP PROCEDURE IF EXISTS CrearPuesto $$
-               CREATE PROCEDURE CrearPuesto (
-                   IN in_nombre_puesto VARCHAR(50)
-               )
-               BEGIN 
-                   INSERT INTO puesto (nombre_puesto) VALUES (in_nombre_puesto);
-               END $$
-               DELIMITER ;
-               
-               
-               CALL modificarPuesto(null, 'TProfesional Auxiliar');
-               ```
-
-               
-
-         
-
-   # VISTAS
-
-   Vista para ver cantidad de clientes por ciudad.
+Vista para ver cantidad de clientes por ciudad.
 
 ```sql
 CREATE VIEW filtarCantidaClientesPais as
